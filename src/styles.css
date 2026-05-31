@@ -1,0 +1,180 @@
+:root {
+  color: #172033;
+  background: #f7f9fb;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button {
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  background: #2563eb;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  padding: 0.85rem 1.1rem;
+}
+
+button:hover,
+button:focus-visible {
+  background: #1d4ed8;
+}
+
+button:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 3px;
+}
+
+.app-shell {
+  align-items: center;
+  display: flex;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.practice-panel {
+  background: #ffffff;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  box-shadow: 0 18px 45px rgba(20, 34, 63, 0.11);
+  margin: 0 auto;
+  max-width: 760px;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  width: 100%;
+}
+
+.panel-header,
+.actions {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.brand,
+.card-label,
+.progress {
+  color: #52627a;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.progress {
+  background: #eef4ff;
+  border-radius: 999px;
+  color: #1e40af;
+  padding: 0.4rem 0.7rem;
+}
+
+.hero-copy {
+  margin: 3rem 0 2rem;
+}
+
+.hero-copy h1 {
+  font-size: clamp(2.1rem, 6vw, 4rem);
+  line-height: 1;
+  margin: 0;
+  max-width: 680px;
+}
+
+.hero-copy p {
+  color: #52627a;
+  font-size: 1.1rem;
+  line-height: 1.65;
+  margin: 1rem 0 0;
+  max-width: 560px;
+}
+
+.vocab-card {
+  background: #f8fafc;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.vocab-card h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1;
+  margin: 0.75rem 0 0.35rem;
+}
+
+.pronunciation {
+  color: #2563eb;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.prompt,
+.definition-block {
+  color: #52627a;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-top: 1.5rem;
+}
+
+.definition-block p,
+.definition-block q {
+  display: block;
+  margin: 0;
+}
+
+.definition-block q {
+  color: #172033;
+  margin-top: 0.75rem;
+}
+
+.actions {
+  justify-content: flex-start;
+  margin-top: 1.5rem;
+}
+
+.secondary {
+  background: #e2e8f0;
+  color: #172033;
+}
+
+.secondary:hover,
+.secondary:focus-visible {
+  background: #cbd5e1;
+}
+
+@media (max-width: 560px) {
+  .app-shell {
+    align-items: stretch;
+    padding: 1rem;
+  }
+
+  .panel-header,
+  .actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .progress {
+    align-self: flex-start;
+  }
+
+  button {
+    width: 100%;
+  }
+}
