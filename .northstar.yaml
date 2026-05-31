@@ -33,7 +33,8 @@ github:
       - 120
       - 600
   project:
-    enabled: false
+    enabled: true
+    project_id: PVT_kwHOEEXCNM4BZSEq
 
 git:
   base_branch: main
