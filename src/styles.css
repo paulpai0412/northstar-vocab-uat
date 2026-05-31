@@ -158,6 +158,10 @@ button:focus-visible {
   grid-template-columns: minmax(0, 1fr);
 }
 
+.progress-review {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
 .section-panel {
   background: #f8fafc;
   border: 1px solid #dbe3ef;

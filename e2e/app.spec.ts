@@ -61,3 +61,21 @@ test('navigates between learning sections', async ({ page }) => {
   );
   await expect(page.getByRole('region', { name: /learning progress/i })).toBeVisible();
 });
+
+test('reviews study progress and latest quiz outcome together', async ({ page }) => {
+  await page.goto('/');
+
+  await page.getByRole('button', { name: /show definition/i }).click();
+  await page.getByRole('button', { name: /mark known/i }).click();
+
+  await page.getByRole('button', { name: /quiz/i }).click();
+  await page.getByRole('button', { name: /^correct$/i }).click();
+
+  await page.getByRole('button', { name: /progress/i }).click();
+
+  const progressReview = page.getByLabel('progress review summary');
+
+  await expect(progressReview).toContainText('Practiced cards1 of 20');
+  await expect(progressReview).toContainText('Latest quiz outcomeCorrect');
+  await expect(progressReview).toContainText('Quiz streak1');
+});

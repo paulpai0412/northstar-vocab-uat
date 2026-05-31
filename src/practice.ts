@@ -4,6 +4,7 @@ export type PracticeSession = {
   currentIndex: number;
   isRevealed: boolean;
   knownWords: string[];
+  latestQuizOutcome: 'correct' | 'incorrect' | null;
   needsReviewWords: string[];
   quizStreak: number;
   studiedCount: number;
@@ -15,6 +16,7 @@ export function createPracticeSession(deck: VocabularyItem[]): PracticeSession {
     currentIndex: 0,
     isRevealed: false,
     knownWords: [],
+    latestQuizOutcome: null,
     needsReviewWords: [],
     quizStreak: 0,
     studiedCount: 0,
@@ -54,6 +56,7 @@ export function answerCurrentQuizWord(
     ...session,
     currentIndex: nextIndex,
     isRevealed: false,
+    latestQuizOutcome: isCorrect ? 'correct' : 'incorrect',
     quizStreak: isCorrect ? session.quizStreak + 1 : 0,
   };
 }
