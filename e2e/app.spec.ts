@@ -79,3 +79,47 @@ test('reviews study progress and latest quiz outcome together', async ({ page })
   await expect(progressReview).toContainText('Latest quiz outcomeCorrect');
   await expect(progressReview).toContainText('Quiz streak1');
 });
+
+test('keeps the full UAT learning flow usable on narrow screens', async ({ page }) => {
+  await page.setViewportSize({ width: 640, height: 720 });
+  await page.goto('/');
+
+  await expect(page.getByRole('region', { name: /study vocabulary/i })).toBeVisible();
+  await expect(page.locator('body')).toHaveJSProperty('scrollWidth', 640);
+
+  await page.getByRole('button', { name: /show definition/i }).click();
+  await page.getByRole('button', { name: /mark known/i }).click();
+
+  await page.getByRole('button', { name: /quiz/i }).click();
+  await expect(page.getByRole('region', { name: /quiz readiness/i })).toBeVisible();
+  await expect(page.locator('body')).toHaveJSProperty('scrollWidth', 640);
+  await page.getByRole('button', { name: /^correct$/i }).click();
+
+  await page.getByRole('button', { name: /progress/i }).click();
+  await expect(page.getByRole('region', { name: /learning progress/i })).toBeVisible();
+  await expect(page.getByLabel('progress review summary')).toContainText(
+    'Latest quiz outcomeCorrect',
+  );
+  await expect(page.locator('body')).toHaveJSProperty('scrollWidth', 640);
+
+  const overflowingStats = await page
+    .locator('.progress-review div')
+    .evaluateAll((cards) =>
+      cards.filter((card) => card.scrollWidth > card.clientWidth).length,
+    );
+  const progressRows = await page
+    .locator('.progress-review div')
+    .evaluateAll(
+      (cards) =>
+        new Set(cards.map((card) => card.getBoundingClientRect().top)).size,
+    );
+  const narrowestProgressStat = await page
+    .locator('.progress-review div')
+    .evaluateAll((cards) =>
+      Math.min(...cards.map((card) => card.getBoundingClientRect().width)),
+    );
+
+  expect(overflowingStats).toBe(0);
+  expect(progressRows).toBeGreaterThan(1);
+  expect(narrowestProgressStat).toBeGreaterThanOrEqual(120);
+});
