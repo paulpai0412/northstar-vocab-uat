@@ -43,7 +43,7 @@ button:focus-visible {
 }
 
 .app-shell {
-  align-items: center;
+  align-items: flex-start;
   display: flex;
   min-height: 100vh;
   padding: 2rem;
@@ -290,17 +290,52 @@ section[aria-label="Study vocabulary"]:focus-visible {
 @media (max-width: 560px) {
   .app-shell {
     align-items: stretch;
+    padding: 0.75rem;
+  }
+
+  .practice-panel {
     padding: 1rem;
   }
 
-  .panel-header,
+  .panel-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
   .actions {
     align-items: stretch;
     flex-direction: column;
+    gap: 0.75rem;
   }
 
   .learning-nav {
-    grid-template-columns: 1fr;
+    gap: 0.25rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 1rem;
+  }
+
+  .nav-button {
+    min-height: 2.5rem;
+    padding: 0.55rem 0.35rem;
+  }
+
+  .hero-copy {
+    margin: 1.5rem 0 1.25rem;
+  }
+
+  .hero-copy h1 {
+    font-size: 2rem;
+    line-height: 1.1;
+  }
+
+  .hero-copy p {
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .vocab-card,
+  .section-panel {
+    padding: 1rem;
   }
 
   .progress {
