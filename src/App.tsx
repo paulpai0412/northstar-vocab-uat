@@ -1,25 +1,7 @@
 import { useMemo, useState } from 'react';
+import { loadVocabularyDeck, vocabularySeedDeck } from './vocabulary';
 
-const vocabulary = [
-  {
-    word: 'resilient',
-    pronunciation: '/ri-zil-yent/',
-    definition: 'Able to recover quickly after difficulty.',
-    example: 'A resilient learner tries again after a difficult quiz.',
-  },
-  {
-    word: 'curious',
-    pronunciation: '/kyur-ee-us/',
-    definition: 'Eager to learn, ask questions, and discover new ideas.',
-    example: 'Curious students notice patterns in new vocabulary.',
-  },
-  {
-    word: 'precise',
-    pronunciation: '/pri-sise/',
-    definition: 'Exact, careful, and clearly expressed.',
-    example: 'A precise sentence uses the best word for the meaning.',
-  },
-];
+const vocabulary = loadVocabularyDeck(vocabularySeedDeck);
 
 export function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -57,12 +39,13 @@ export function App() {
         <article className="vocab-card">
           <p className="card-label">Today&apos;s word</p>
           <h2>{currentCard.word}</h2>
-          <p className="pronunciation">{currentCard.pronunciation}</p>
+          <p className="part-of-speech">{currentCard.partOfSpeech}</p>
+          <p className="pronunciation">{currentCard.pronunciationHint}</p>
 
           {showDefinition ? (
             <div className="definition-block">
               <p>{currentCard.definition}</p>
-              <q>{currentCard.example}</q>
+              <q>{currentCard.exampleSentence}</q>
             </div>
           ) : (
             <p className="prompt">Try to define the word before revealing it.</p>
