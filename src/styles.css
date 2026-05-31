@@ -85,6 +85,31 @@ button:focus-visible {
   padding: 0.4rem 0.7rem;
 }
 
+.learning-nav {
+  background: #eef2f7;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  display: grid;
+  gap: 0.35rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 1.5rem;
+  padding: 0.35rem;
+}
+
+.nav-button {
+  background: transparent;
+  color: #52627a;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.75rem;
+}
+
+.nav-button:hover,
+.nav-button:focus-visible,
+.nav-button[aria-current="page"] {
+  background: #ffffff;
+  color: #172033;
+}
+
 .hero-copy {
   margin: 3rem 0 2rem;
 }
@@ -109,6 +134,25 @@ button:focus-visible {
   border: 1px solid #dbe3ef;
   border-radius: 8px;
   padding: 1.5rem;
+}
+
+.section-panel {
+  background: #f8fafc;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.section-panel h2 {
+  font-size: 1.65rem;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.section-panel p {
+  color: #52627a;
+  line-height: 1.7;
+  margin: 1rem 0 0;
 }
 
 .vocab-card h2 {
@@ -207,6 +251,10 @@ button:focus-visible {
   .practice-stats {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .learning-nav {
+    grid-template-columns: 1fr;
   }
 
   .practice-stats {
