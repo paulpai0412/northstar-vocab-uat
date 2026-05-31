@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { type KeyboardEvent, useMemo, useState } from 'react';
 import {
   createPracticeSession,
   markCurrentWordKnown,
@@ -38,6 +38,23 @@ export function App() {
     );
   }
 
+  function handleReveal() {
+    setSession((currentSession) => revealCurrentCard(currentSession));
+  }
+
+  function handleStudyKeyDown(event: KeyboardEvent<HTMLElement>) {
+    if (event.key === 'Enter' && !session.isRevealed) {
+      event.preventDefault();
+      handleReveal();
+      return;
+    }
+
+    if (event.key === 'ArrowRight' && session.isRevealed) {
+      event.preventDefault();
+      handleKnown();
+    }
+  }
+
   const quizReadyCount = session.knownWords.length;
   const reviewCount = session.needsReviewWords.length;
 
@@ -74,7 +91,16 @@ export function App() {
         </div>
 
         {activeSection === 'study' ? (
-          <section aria-label="Study vocabulary">
+          <section
+            aria-describedby="study-shortcuts"
+            aria-label="Study vocabulary"
+            onKeyDown={handleStudyKeyDown}
+            tabIndex={0}
+          >
+            <p id="study-shortcuts" className="sr-only">
+              Press Enter to show the definition. After the answer is shown, press
+              Arrow Right to mark known and move to the next card.
+            </p>
             <article className="vocab-card">
               <p className="card-label">Today&apos;s word</p>
               <h2>{currentCard.word}</h2>
@@ -109,9 +135,7 @@ export function App() {
             <div className="actions">
               <button
                 type="button"
-                onClick={() =>
-                  setSession((currentSession) => revealCurrentCard(currentSession))
-                }
+                onClick={handleReveal}
               >
                 Show definition
               </button>

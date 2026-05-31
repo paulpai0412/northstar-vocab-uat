@@ -22,6 +22,22 @@ test('practices a vocabulary card in a real browser', async ({ page }) => {
   );
 });
 
+test('supports keyboard study reveal and advance', async ({ page }) => {
+  await page.goto('/');
+
+  await page.getByRole('region', { name: /study vocabulary/i }).focus();
+  await page.keyboard.press('Enter');
+
+  await expect(
+    page.getByText(/able to recover quickly after difficulty/i),
+  ).toBeVisible();
+
+  await page.keyboard.press('ArrowRight');
+
+  await expect(page.getByRole('heading', { name: /curious/i })).toBeVisible();
+  await expect(page.getByLabel('card progress')).toContainText('2 of 20');
+});
+
 test('navigates between learning sections', async ({ page }) => {
   await page.goto('/');
 
