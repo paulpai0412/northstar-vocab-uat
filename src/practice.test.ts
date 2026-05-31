@@ -59,6 +59,7 @@ describe('practice session transitions', () => {
 
     expect(secondAnswer).toMatchObject({
       currentIndex: 2,
+      latestQuizOutcome: 'correct',
       quizStreak: 2,
       studiedCount: 0,
       knownWords: [],
@@ -79,6 +80,7 @@ describe('practice session transitions', () => {
 
     expect(answerCurrentQuizWord(session, vocabularySeedDeck, false)).toMatchObject({
       currentIndex: 3,
+      latestQuizOutcome: 'incorrect',
       quizStreak: 0,
       studiedCount: 0,
       knownWords: [],

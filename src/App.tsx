@@ -64,6 +64,13 @@ export function App() {
 
   const quizReadyCount = session.knownWords.length;
   const reviewCount = session.needsReviewWords.length;
+  const practicedCards = `${session.studiedCount} of ${session.totalCards}`;
+  const latestQuizOutcome =
+    session.latestQuizOutcome === null
+      ? 'No quiz yet'
+      : session.latestQuizOutcome === 'correct'
+        ? 'Correct'
+        : 'Incorrect';
 
   return (
     <main className="app-shell">
@@ -192,10 +199,10 @@ export function App() {
         {activeSection === 'progress' ? (
           <section className="section-panel" aria-label="Learning progress">
             <h2>Learning progress</h2>
-            <dl className="practice-stats" aria-label="progress statistics">
+            <dl className="practice-stats progress-review" aria-label="progress review summary">
               <div>
-                <dt>Studied</dt>
-                <dd>{session.studiedCount}</dd>
+                <dt>Practiced cards</dt>
+                <dd>{practicedCards}</dd>
               </div>
               <div>
                 <dt>Known</dt>
@@ -204,6 +211,14 @@ export function App() {
               <div>
                 <dt>Review</dt>
                 <dd>{reviewCount}</dd>
+              </div>
+              <div>
+                <dt>Quiz streak</dt>
+                <dd>{session.quizStreak}</dd>
+              </div>
+              <div>
+                <dt>Latest quiz outcome</dt>
+                <dd>{latestQuizOutcome}</dd>
               </div>
             </dl>
           </section>

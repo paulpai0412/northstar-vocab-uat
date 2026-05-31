@@ -141,6 +141,25 @@ describe('App', () => {
     expect(screen.getByLabelText(/quiz streak score/i)).toHaveTextContent('0');
   });
 
+  it('integrates studied card progress and latest quiz outcome in progress', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: /show definition/i }));
+    await user.click(screen.getByRole('button', { name: /mark known/i }));
+
+    await user.click(screen.getByRole('button', { name: /quiz/i }));
+    await user.click(screen.getByRole('button', { name: /^correct$/i }));
+
+    await user.click(screen.getByRole('button', { name: /progress/i }));
+
+    const progressStats = screen.getByLabelText(/progress review summary/i);
+
+    expect(progressStats).toHaveTextContent('Practiced cards1 of 20');
+    expect(progressStats).toHaveTextContent('Latest quiz outcomeCorrect');
+    expect(progressStats).toHaveTextContent('Quiz streak1');
+  });
+
   it('wraps back to the first word after the final card', async () => {
     const user = userEvent.setup();
     render(<App />);
