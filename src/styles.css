@@ -240,6 +240,20 @@ button:focus-visible {
   background: #cbd5e1;
 }
 
+.sr-only {
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+section[aria-label="Study vocabulary"]:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 6px;
+}
+
 @media (max-width: 560px) {
   .app-shell {
     align-items: stretch;

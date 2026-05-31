@@ -73,6 +73,24 @@ describe('App', () => {
     ).toBeInTheDocument();
   });
 
+  it('reveals and advances the study card with keyboard shortcuts', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    screen.getByRole('region', { name: /study vocabulary/i }).focus();
+
+    await user.keyboard('{Enter}');
+
+    expect(
+      screen.getByText(/able to recover quickly after difficulty or change/i),
+    ).toBeInTheDocument();
+
+    await user.keyboard('{ArrowRight}');
+
+    expect(screen.getByRole('heading', { name: /curious/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/card progress/i)).toHaveTextContent('2 of 20');
+  });
+
   it('marks a revealed word as known and resets the prompt', async () => {
     const user = userEvent.setup();
     render(<App />);
