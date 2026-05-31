@@ -1,21 +1,33 @@
 import { useMemo, useState } from 'react';
+import {
+  createPracticeSession,
+  markCurrentWordKnown,
+  markCurrentWordNeedsReview,
+  revealCurrentCard,
+} from './practice';
 import { loadVocabularyDeck, vocabularySeedDeck } from './vocabulary';
 
 const vocabulary = loadVocabularyDeck(vocabularySeedDeck);
 
 export function App() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [showDefinition, setShowDefinition] = useState(false);
+  const [session, setSession] = useState(() => createPracticeSession(vocabulary));
 
-  const currentCard = vocabulary[currentIndex];
+  const currentCard = vocabulary[session.currentIndex];
   const progress = useMemo(
-    () => `${currentIndex + 1} of ${vocabulary.length}`,
-    [currentIndex],
+    () => `${session.currentIndex + 1} of ${session.totalCards}`,
+    [session.currentIndex, session.totalCards],
   );
 
-  function handleNextCard() {
-    setShowDefinition(false);
-    setCurrentIndex((index) => (index + 1) % vocabulary.length);
+  function handleKnown() {
+    setSession((currentSession) =>
+      markCurrentWordKnown(currentSession, vocabulary),
+    );
+  }
+
+  function handleNeedsReview() {
+    setSession((currentSession) =>
+      markCurrentWordNeedsReview(currentSession, vocabulary),
+    );
   }
 
   return (
@@ -42,7 +54,7 @@ export function App() {
           <p className="part-of-speech">{currentCard.partOfSpeech}</p>
           <p className="pronunciation">{currentCard.pronunciationHint}</p>
 
-          {showDefinition ? (
+          {session.isRevealed ? (
             <div className="definition-block">
               <p>{currentCard.definition}</p>
               <q>{currentCard.exampleSentence}</q>
@@ -52,12 +64,33 @@ export function App() {
           )}
         </article>
 
+        <dl className="practice-stats" aria-label="practice statistics">
+          <div>
+            <dt>practice_words_studied</dt>
+            <dd>{session.studiedCount}</dd>
+          </div>
+          <div>
+            <dt>Known</dt>
+            <dd>{session.knownWords.length}</dd>
+          </div>
+          <div>
+            <dt>Needs review</dt>
+            <dd>{session.needsReviewWords.length}</dd>
+          </div>
+        </dl>
+
         <div className="actions">
-          <button type="button" onClick={() => setShowDefinition(true)}>
+          <button
+            type="button"
+            onClick={() => setSession((currentSession) => revealCurrentCard(currentSession))}
+          >
             Show definition
           </button>
-          <button type="button" className="secondary" onClick={handleNextCard}>
-            Next word
+          <button type="button" className="secondary" onClick={handleKnown}>
+            Mark known
+          </button>
+          <button type="button" className="secondary" onClick={handleNeedsReview}>
+            Needs review
           </button>
         </div>
       </section>
