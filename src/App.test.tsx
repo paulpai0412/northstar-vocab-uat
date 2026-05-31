@@ -4,6 +4,44 @@ import { describe, expect, it } from 'vitest';
 import { App } from './App';
 
 describe('App', () => {
+  it('provides stable learning navigation for study, quiz, and progress', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const navigation = screen.getByRole('navigation', {
+      name: /learning sections/i,
+    });
+
+    expect(navigation).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /study/i })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+    expect(
+      screen.getByRole('region', { name: /study vocabulary/i }),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /quiz/i }));
+
+    expect(screen.getByRole('button', { name: /quiz/i })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+    expect(
+      screen.getByRole('region', { name: /quiz readiness/i }),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /progress/i }));
+
+    expect(screen.getByRole('button', { name: /progress/i })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+    expect(
+      screen.getByRole('region', { name: /learning progress/i }),
+    ).toBeInTheDocument();
+  });
+
   it('shows the first vocabulary card and progress', () => {
     render(<App />);
 

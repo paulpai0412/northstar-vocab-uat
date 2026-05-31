@@ -21,3 +21,27 @@ test('practices a vocabulary card in a real browser', async ({ page }) => {
     'practice_words_studied1',
   );
 });
+
+test('navigates between learning sections', async ({ page }) => {
+  await page.goto('/');
+
+  await expect(page.getByRole('navigation', { name: /learning sections/i })).toBeVisible();
+  await expect(page.getByRole('button', { name: /study/i })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+
+  await page.getByRole('button', { name: /quiz/i }).click();
+  await expect(page.getByRole('button', { name: /quiz/i })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+  await expect(page.getByRole('region', { name: /quiz readiness/i })).toBeVisible();
+
+  await page.getByRole('button', { name: /progress/i }).click();
+  await expect(page.getByRole('button', { name: /progress/i })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+  await expect(page.getByRole('region', { name: /learning progress/i })).toBeVisible();
+});
