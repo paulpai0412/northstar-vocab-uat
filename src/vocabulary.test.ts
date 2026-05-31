@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  answerQuizQuestion,
+  createQuizQuestions,
   findVocabularyWord,
   loadVocabularyDeck,
   vocabularySeedDeck,
@@ -73,5 +75,56 @@ describe('vocabulary deck', () => {
       partOfSpeech: 'adjective',
     });
     expect(findVocabularyWord(deck, 'unknown')).toBeUndefined();
+  });
+});
+
+describe('quiz generation', () => {
+  it('generates multiple-choice options with exactly one correct answer', () => {
+    const deck = loadVocabularyDeck(vocabularySeedDeck);
+    const [question] = createQuizQuestions(deck);
+
+    expect(question.prompt).toBe('What does "resilient" mean?');
+    expect(question.correctAnswer).toBe(
+      'Able to recover quickly after difficulty or change.',
+    );
+    expect(question.options).toHaveLength(4);
+    expect(new Set(question.options).size).toBe(4);
+    expect(question.options).toContain(question.correctAnswer);
+    expect(
+      question.options.filter((option) => option === question.correctAnswer),
+    ).toHaveLength(1);
+  });
+
+  it('keeps the correct answer attached to the selected vocabulary item', () => {
+    const deck = loadVocabularyDeck(vocabularySeedDeck);
+    const questions = createQuizQuestions(deck);
+
+    expect(questions[1]).toMatchObject({
+      word: 'curious',
+      correctAnswer: 'Eager to learn, ask questions, and discover new ideas.',
+    });
+  });
+
+  it('returns positive feedback for a correct answer', () => {
+    const deck = loadVocabularyDeck(vocabularySeedDeck);
+    const [question] = createQuizQuestions(deck);
+
+    expect(answerQuizQuestion(question, question.correctAnswer)).toEqual({
+      isCorrect: true,
+      feedback: 'Correct. resilient means: Able to recover quickly after difficulty or change.',
+    });
+  });
+
+  it('returns corrective feedback for an incorrect answer', () => {
+    const deck = loadVocabularyDeck(vocabularySeedDeck);
+    const [question] = createQuizQuestions(deck);
+    const incorrectOption = question.options.find(
+      (option) => option !== question.correctAnswer,
+    );
+
+    expect(answerQuizQuestion(question, incorrectOption ?? '')).toEqual({
+      isCorrect: false,
+      feedback: 'Not quite. resilient means: Able to recover quickly after difficulty or change.',
+    });
   });
 });

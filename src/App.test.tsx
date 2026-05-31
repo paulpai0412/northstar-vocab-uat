@@ -60,4 +60,48 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: /resilient/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/card progress/i)).toHaveTextContent('1 of 20');
   });
+
+  it('lets a user answer a quiz question and move to the next question', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: /quiz mode/i }));
+    await user.click(
+      screen.getByRole('button', {
+        name: /able to recover quickly after difficulty or change/i,
+      }),
+    );
+
+    expect(screen.getByRole('status')).toHaveTextContent(
+      /correct\. resilient means/i,
+    );
+    expect(screen.getByLabelText(/quiz questions answered/i)).toHaveTextContent(
+      '1',
+    );
+
+    await user.click(screen.getByRole('button', { name: /next question/i }));
+
+    expect(
+      screen.getByRole('heading', { name: /what does "curious" mean\?/i }),
+    ).toBeInTheDocument();
+  });
+
+  it('shows corrective feedback for an incorrect quiz answer', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: /quiz mode/i }));
+    await user.click(
+      screen.getByRole('button', {
+        name: /eager to learn, ask questions, and discover new ideas/i,
+      }),
+    );
+
+    expect(screen.getByRole('status')).toHaveTextContent(
+      /not quite\. resilient means/i,
+    );
+    expect(screen.getByLabelText(/quiz questions answered/i)).toHaveTextContent(
+      '1',
+    );
+  });
 });

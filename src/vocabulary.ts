@@ -6,6 +6,18 @@ export type VocabularyItem = {
   pronunciationHint: string;
 };
 
+export type QuizQuestion = {
+  word: string;
+  prompt: string;
+  options: string[];
+  correctAnswer: string;
+};
+
+export type QuizAnswerResult = {
+  isCorrect: boolean;
+  feedback: string;
+};
+
 const requiredFields = [
   'word',
   'partOfSpeech',
@@ -185,6 +197,49 @@ export function findVocabularyWord(
   const normalizedQuery = normalizeWord(word);
 
   return deck.find((item) => normalizeWord(item.word) === normalizedQuery);
+}
+
+export function createQuizQuestions(deck: VocabularyItem[]): QuizQuestion[] {
+  const loadedDeck = loadVocabularyDeck(deck);
+
+  return loadedDeck.map((item, index) => {
+    const distractors = loadedDeck
+      .filter((option) => normalizeWord(option.word) !== normalizeWord(item.word))
+      .slice(index, index + 3);
+    const wrappedDistractors =
+      distractors.length === 3
+        ? distractors
+        : [
+            ...distractors,
+            ...loadedDeck
+              .filter(
+                (option) =>
+                  normalizeWord(option.word) !== normalizeWord(item.word) &&
+                  !distractors.includes(option),
+              )
+              .slice(0, 3 - distractors.length),
+          ];
+
+    return {
+      word: item.word,
+      prompt: `What does "${item.word}" mean?`,
+      options: [item.definition, ...wrappedDistractors.map((option) => option.definition)],
+      correctAnswer: item.definition,
+    };
+  });
+}
+
+export function answerQuizQuestion(
+  question: QuizQuestion,
+  selectedAnswer: string,
+): QuizAnswerResult {
+  const isCorrect = selectedAnswer === question.correctAnswer;
+  const prefix = isCorrect ? 'Correct.' : 'Not quite.';
+
+  return {
+    isCorrect,
+    feedback: `${prefix} ${question.word} means: ${question.correctAnswer}`,
+  };
 }
 
 function normalizeWord(word: string) {
