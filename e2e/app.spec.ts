@@ -15,6 +15,9 @@ test('practices a vocabulary card in a real browser', async ({ page }) => {
     page.getByText(/able to recover quickly after difficulty/i),
   ).toBeVisible();
 
-  await page.getByRole('button', { name: /next word/i }).click();
+  await page.getByRole('button', { name: /mark known/i }).click();
   await expect(page.getByRole('heading', { name: /curious/i })).toBeVisible();
+  await expect(page.getByLabel('practice statistics')).toContainText(
+    'practice_words_studied1',
+  );
 });

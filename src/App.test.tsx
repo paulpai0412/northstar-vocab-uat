@@ -35,18 +35,36 @@ describe('App', () => {
     ).toBeInTheDocument();
   });
 
-  it('moves to the next word and resets the prompt', async () => {
+  it('marks a revealed word as known and resets the prompt', async () => {
     const user = userEvent.setup();
     render(<App />);
 
     await user.click(screen.getByRole('button', { name: /show definition/i }));
-    await user.click(screen.getByRole('button', { name: /next word/i }));
+    await user.click(screen.getByRole('button', { name: /mark known/i }));
 
     expect(screen.getByRole('heading', { name: /curious/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/card progress/i)).toHaveTextContent('2 of 20');
+    expect(screen.getByText('practice_words_studied')).toBeInTheDocument();
+    expect(screen.getByLabelText(/practice statistics/i)).toHaveTextContent(
+      'practice_words_studied1',
+    );
+    expect(screen.getByLabelText(/practice statistics/i)).toHaveTextContent('Known1');
     expect(
       screen.getByText(/try to define the word before revealing it/i),
     ).toBeInTheDocument();
+  });
+
+  it('marks a revealed word as needs review and tracks the review count', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: /show definition/i }));
+    await user.click(screen.getByRole('button', { name: /needs review/i }));
+
+    expect(screen.getByRole('heading', { name: /curious/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/practice statistics/i)).toHaveTextContent(
+      'Needs review1',
+    );
   });
 
   it('wraps back to the first word after the final card', async () => {
@@ -54,7 +72,7 @@ describe('App', () => {
     render(<App />);
 
     for (let count = 0; count < 20; count += 1) {
-      await user.click(screen.getByRole('button', { name: /next word/i }));
+      await user.click(screen.getByRole('button', { name: /mark known/i }));
     }
 
     expect(screen.getByRole('heading', { name: /resilient/i })).toBeInTheDocument();
