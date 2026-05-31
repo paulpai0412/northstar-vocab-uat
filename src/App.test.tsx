@@ -13,7 +13,9 @@ describe('App', () => {
       }),
     ).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /resilient/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/card progress/i)).toHaveTextContent('1 of 3');
+    expect(screen.getByText(/adjective/i)).toBeInTheDocument();
+    expect(screen.getByText(/ri-zil-yent/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/card progress/i)).toHaveTextContent('1 of 20');
     expect(
       screen.getByText(/try to define the word before revealing it/i),
     ).toBeInTheDocument();
@@ -26,7 +28,7 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: /show definition/i }));
 
     expect(
-      screen.getByText(/able to recover quickly after difficulty/i),
+      screen.getByText(/able to recover quickly after difficulty or change/i),
     ).toBeInTheDocument();
     expect(
       screen.getByText(/a resilient learner tries again after a difficult quiz/i),
@@ -41,7 +43,7 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: /next word/i }));
 
     expect(screen.getByRole('heading', { name: /curious/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/card progress/i)).toHaveTextContent('2 of 3');
+    expect(screen.getByLabelText(/card progress/i)).toHaveTextContent('2 of 20');
     expect(
       screen.getByText(/try to define the word before revealing it/i),
     ).toBeInTheDocument();
@@ -51,11 +53,11 @@ describe('App', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole('button', { name: /next word/i }));
-    await user.click(screen.getByRole('button', { name: /next word/i }));
-    await user.click(screen.getByRole('button', { name: /next word/i }));
+    for (let count = 0; count < 20; count += 1) {
+      await user.click(screen.getByRole('button', { name: /next word/i }));
+    }
 
     expect(screen.getByRole('heading', { name: /resilient/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/card progress/i)).toHaveTextContent('1 of 3');
+    expect(screen.getByLabelText(/card progress/i)).toHaveTextContent('1 of 20');
   });
 });
