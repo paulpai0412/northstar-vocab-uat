@@ -18,6 +18,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 button {
@@ -42,7 +43,7 @@ button:focus-visible {
 }
 
 .app-shell {
-  align-items: center;
+  align-items: flex-start;
   display: flex;
   min-height: 100vh;
   padding: 2rem;
@@ -111,12 +112,12 @@ button:focus-visible {
 }
 
 .hero-copy {
-  margin: 3rem 0 2rem;
+  margin: clamp(1.75rem, 5vw, 3rem) 0 2rem;
 }
 
 .hero-copy h1 {
-  font-size: clamp(2.1rem, 6vw, 4rem);
-  line-height: 1;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.05;
   margin: 0;
   max-width: 680px;
 }
@@ -159,7 +160,7 @@ button:focus-visible {
 }
 
 .progress-review {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 }
 
 .section-panel {
@@ -224,7 +225,7 @@ button:focus-visible {
 .practice-stats {
   display: grid;
   gap: 0.75rem;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 }
 
 .practice-stats div {
@@ -243,6 +244,7 @@ button:focus-visible {
   color: #52627a;
   font-size: 0.78rem;
   font-weight: 800;
+  overflow-wrap: anywhere;
 }
 
 .practice-stats dd {
@@ -252,8 +254,13 @@ button:focus-visible {
 }
 
 .actions {
+  flex-wrap: wrap;
   justify-content: flex-start;
   margin-top: 1.5rem;
+}
+
+.actions button {
+  flex: 1 1 11rem;
 }
 
 .secondary {
@@ -283,22 +290,52 @@ section[aria-label="Study vocabulary"]:focus-visible {
 @media (max-width: 560px) {
   .app-shell {
     align-items: stretch;
+    padding: 0.75rem;
+  }
+
+  .practice-panel {
     padding: 1rem;
   }
 
-  .panel-header,
-  .actions,
-  .practice-stats {
+  .panel-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .actions {
     align-items: stretch;
     flex-direction: column;
+    gap: 0.75rem;
   }
 
   .learning-nav {
-    grid-template-columns: 1fr;
+    gap: 0.25rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 1rem;
   }
 
-  .practice-stats {
-    display: flex;
+  .nav-button {
+    min-height: 2.5rem;
+    padding: 0.55rem 0.35rem;
+  }
+
+  .hero-copy {
+    margin: 1.5rem 0 1.25rem;
+  }
+
+  .hero-copy h1 {
+    font-size: 2rem;
+    line-height: 1.1;
+  }
+
+  .hero-copy p {
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .vocab-card,
+  .section-panel {
+    padding: 1rem;
   }
 
   .progress {
