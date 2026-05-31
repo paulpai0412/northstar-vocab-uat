@@ -123,6 +123,24 @@ describe('App', () => {
     );
   });
 
+  it('shows quiz streak increases and resets after quiz answers', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: /quiz/i }));
+
+    expect(screen.getByLabelText(/quiz streak score/i)).toHaveTextContent('0');
+
+    await user.click(screen.getByRole('button', { name: /^correct$/i }));
+    await user.click(screen.getByRole('button', { name: /^correct$/i }));
+
+    expect(screen.getByLabelText(/quiz streak score/i)).toHaveTextContent('2');
+
+    await user.click(screen.getByRole('button', { name: /incorrect/i }));
+
+    expect(screen.getByLabelText(/quiz streak score/i)).toHaveTextContent('0');
+  });
+
   it('wraps back to the first word after the final card', async () => {
     const user = userEvent.setup();
     render(<App />);

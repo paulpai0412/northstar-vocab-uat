@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  answerCurrentQuizWord,
   createPracticeSession,
   markCurrentWordKnown,
   markCurrentWordNeedsReview,
@@ -41,6 +42,47 @@ describe('practice session transitions', () => {
       studiedCount: 1,
       knownWords: [],
       needsReviewWords: ['resilient'],
+    });
+  });
+
+  it('increases the quiz streak after correct answers', () => {
+    const firstAnswer = answerCurrentQuizWord(
+      createPracticeSession(vocabularySeedDeck),
+      vocabularySeedDeck,
+      true,
+    );
+    const secondAnswer = answerCurrentQuizWord(
+      firstAnswer,
+      vocabularySeedDeck,
+      true,
+    );
+
+    expect(secondAnswer).toMatchObject({
+      currentIndex: 2,
+      quizStreak: 2,
+      studiedCount: 0,
+      knownWords: [],
+      needsReviewWords: [],
+    });
+  });
+
+  it('resets the quiz streak after incorrect answers', () => {
+    const session = answerCurrentQuizWord(
+      answerCurrentQuizWord(
+        createPracticeSession(vocabularySeedDeck),
+        vocabularySeedDeck,
+        true,
+      ),
+      vocabularySeedDeck,
+      true,
+    );
+
+    expect(answerCurrentQuizWord(session, vocabularySeedDeck, false)).toMatchObject({
+      currentIndex: 3,
+      quizStreak: 0,
+      studiedCount: 0,
+      knownWords: [],
+      needsReviewWords: [],
     });
   });
 });

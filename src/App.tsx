@@ -1,5 +1,6 @@
 import { type KeyboardEvent, useMemo, useState } from 'react';
 import {
+  answerCurrentQuizWord,
   createPracticeSession,
   markCurrentWordKnown,
   markCurrentWordNeedsReview,
@@ -40,6 +41,12 @@ export function App() {
 
   function handleReveal() {
     setSession((currentSession) => revealCurrentCard(currentSession));
+  }
+
+  function handleQuizAnswer(isCorrect: boolean) {
+    setSession((currentSession) =>
+      answerCurrentQuizWord(currentSession, vocabulary, isCorrect),
+    );
   }
 
   function handleStudyKeyDown(event: KeyboardEvent<HTMLElement>) {
@@ -156,6 +163,29 @@ export function App() {
               {quizReadyCount} known words are ready for quiz practice. Keep studying
               to unlock stronger recall.
             </p>
+            <article className="quiz-card" aria-label="Quiz prompt">
+              <p className="card-label">Quiz word</p>
+              <h3>{currentCard.word}</h3>
+              <p>{currentCard.definition}</p>
+            </article>
+            <dl className="practice-stats quiz-stats" aria-label="quiz statistics">
+              <div>
+                <dt>Streak</dt>
+                <dd aria-label="quiz streak score">{session.quizStreak}</dd>
+              </div>
+            </dl>
+            <div className="actions">
+              <button type="button" onClick={() => handleQuizAnswer(true)}>
+                Correct
+              </button>
+              <button
+                type="button"
+                className="secondary"
+                onClick={() => handleQuizAnswer(false)}
+              >
+                Incorrect
+              </button>
+            </div>
           </section>
         ) : null}
 

@@ -136,6 +136,28 @@ button:focus-visible {
   padding: 1.5rem;
 }
 
+.quiz-card {
+  background: #ffffff;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+}
+
+.quiz-card h3 {
+  font-size: 2rem;
+  line-height: 1.1;
+  margin: 0.6rem 0 0.4rem;
+}
+
+.quiz-card p:last-child {
+  margin-top: 0.5rem;
+}
+
+.quiz-stats {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .section-panel {
   background: #f8fafc;
   border: 1px solid #dbe3ef;

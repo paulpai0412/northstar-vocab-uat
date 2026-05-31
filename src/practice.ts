@@ -5,6 +5,7 @@ export type PracticeSession = {
   isRevealed: boolean;
   knownWords: string[];
   needsReviewWords: string[];
+  quizStreak: number;
   studiedCount: number;
   totalCards: number;
 };
@@ -15,6 +16,7 @@ export function createPracticeSession(deck: VocabularyItem[]): PracticeSession {
     isRevealed: false,
     knownWords: [],
     needsReviewWords: [],
+    quizStreak: 0,
     studiedCount: 0,
     totalCards: deck.length,
   };
@@ -41,13 +43,28 @@ export function markCurrentWordNeedsReview(
   return markCurrentWord(session, deck, 'needs-review');
 }
 
+export function answerCurrentQuizWord(
+  session: PracticeSession,
+  deck: VocabularyItem[],
+  isCorrect: boolean,
+): PracticeSession {
+  const nextIndex = getNextIndex(session, deck);
+
+  return {
+    ...session,
+    currentIndex: nextIndex,
+    isRevealed: false,
+    quizStreak: isCorrect ? session.quizStreak + 1 : 0,
+  };
+}
+
 function markCurrentWord(
   session: PracticeSession,
   deck: VocabularyItem[],
   outcome: 'known' | 'needs-review',
 ): PracticeSession {
   const currentWord = deck[session.currentIndex]?.word;
-  const nextIndex = (session.currentIndex + 1) % session.totalCards;
+  const nextIndex = getNextIndex(session, deck);
 
   return {
     ...session,
@@ -63,4 +80,10 @@ function markCurrentWord(
         ? [...session.needsReviewWords, currentWord]
         : session.needsReviewWords,
   };
+}
+
+function getNextIndex(session: PracticeSession, deck: VocabularyItem[]): number {
+  const totalCards = session.totalCards || deck.length;
+
+  return totalCards > 0 ? (session.currentIndex + 1) % totalCards : 0;
 }
