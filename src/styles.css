@@ -145,6 +145,71 @@ button:focus-visible {
   padding: 1.25rem;
 }
 
+.vocabulary-search {
+  margin-top: 1.5rem;
+}
+
+.vocabulary-search h2 {
+  font-size: 1.35rem;
+  margin: 0 0 0.75rem;
+}
+
+.vocabulary-search label {
+  color: #52627a;
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin-bottom: 0.45rem;
+}
+
+.vocabulary-search input {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  color: #172033;
+  font: inherit;
+  padding: 0.85rem 1rem;
+  width: 100%;
+}
+
+.vocabulary-search input:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 3px;
+}
+
+.vocabulary-results {
+  display: grid;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.vocabulary-results li,
+.empty-state {
+  background: #ffffff;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.result-word {
+  color: #172033;
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 0 0 0.35rem;
+}
+
+.vocabulary-results p,
+.empty-state {
+  color: #52627a;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.vocabulary-results .result-word {
+  color: #172033;
+}
+
 .quiz-card h3 {
   font-size: 2rem;
   line-height: 1.1;

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { App } from './App';
@@ -59,6 +59,53 @@ describe('App', () => {
     ).toBeInTheDocument();
   });
 
+  it('filters vocabulary results by word', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.type(
+      screen.getByRole('searchbox', { name: /search vocabulary/i }),
+      'adapt',
+    );
+
+    const results = screen.getByRole('list', { name: /vocabulary results/i });
+
+    expect(within(results).getByText(/adapt/i)).toBeInTheDocument();
+    expect(within(results).queryByText(/resilient/i)).not.toBeInTheDocument();
+  });
+
+  it('filters vocabulary results by definition', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.type(
+      screen.getByRole('searchbox', { name: /search vocabulary/i }),
+      'shared goal',
+    );
+
+    const results = screen.getByRole('list', { name: /vocabulary results/i });
+
+    expect(within(results).getByText(/collaborate/i)).toBeInTheDocument();
+    expect(within(results).queryByText(/curious/i)).not.toBeInTheDocument();
+  });
+
+  it('shows an empty state when vocabulary search has no matches', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.type(
+      screen.getByRole('searchbox', { name: /search vocabulary/i }),
+      'no matching word exists',
+    );
+
+    expect(
+      screen.getByText(/no vocabulary entries match your search/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('list', { name: /vocabulary results/i }),
+    ).not.toBeInTheDocument();
+  });
+
   it('reveals the definition and example sentence', async () => {
     const user = userEvent.setup();
     render(<App />);
@@ -66,7 +113,7 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: /show definition/i }));
 
     expect(
-      screen.getByText(/able to recover quickly after difficulty or change/i),
+      screen.getAllByText(/able to recover quickly after difficulty or change/i)[0],
     ).toBeInTheDocument();
     expect(
       screen.getByText(/a resilient learner tries again after a difficult quiz/i),
@@ -82,7 +129,7 @@ describe('App', () => {
     await user.keyboard('{Enter}');
 
     expect(
-      screen.getByText(/able to recover quickly after difficulty or change/i),
+      screen.getAllByText(/able to recover quickly after difficulty or change/i)[0],
     ).toBeInTheDocument();
 
     await user.keyboard('{ArrowRight}');
