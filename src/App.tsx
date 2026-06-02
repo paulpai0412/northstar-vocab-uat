@@ -20,8 +20,22 @@ const learningSections: Array<{ id: LearningSection; label: string }> = [
 export function App() {
   const [session, setSession] = useState(() => createPracticeSession(vocabulary));
   const [activeSection, setActiveSection] = useState<LearningSection>('study');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const currentCard = vocabulary[session.currentIndex];
+  const filteredVocabulary = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLocaleLowerCase('en-US');
+
+    if (normalizedQuery.length === 0) {
+      return vocabulary;
+    }
+
+    return vocabulary.filter((item) => {
+      const searchableText = `${item.word} ${item.definition}`.toLocaleLowerCase('en-US');
+
+      return searchableText.includes(normalizedQuery);
+    });
+  }, [searchQuery]);
   const progress = useMemo(
     () => `${session.currentIndex + 1} of ${session.totalCards}`,
     [session.currentIndex, session.totalCards],
@@ -130,6 +144,31 @@ export function App() {
                 <p className="prompt">Try to define the word before revealing it.</p>
               )}
             </article>
+
+            <section className="vocabulary-search" aria-labelledby="vocabulary-search-heading">
+              <h2 id="vocabulary-search-heading">Vocabulary search</h2>
+              <label htmlFor="vocabulary-search-input">Search vocabulary</label>
+              <input
+                id="vocabulary-search-input"
+                type="search"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="Search by word or definition"
+              />
+
+              {filteredVocabulary.length > 0 ? (
+                <ul className="vocabulary-results" aria-label="Vocabulary results">
+                  {filteredVocabulary.map((item) => (
+                    <li key={item.word}>
+                      <p className="result-word">{item.word}</p>
+                      <p>{item.definition}</p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="empty-state">No vocabulary entries match your search.</p>
+              )}
+            </section>
 
             <dl className="practice-stats" aria-label="practice statistics">
               <div>
